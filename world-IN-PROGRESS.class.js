@@ -1,7 +1,6 @@
 import CollisionManager from "./CollisionManager.js";
 
-// class World {
-export default class World {
+class World {
   START_SCREEN = new StartScreen();
   camera_x = 0;
   level;

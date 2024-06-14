@@ -4,7 +4,7 @@ export default class CollisionManager {
   }
 
   checkCollisions() {
-    checkExAllCollisions() {
+    checkExAllCollisions();
     this.checkCollisionEnemies();
     this.checkCollisionBottles();
     this.checkCollisionCoins();
@@ -89,5 +89,3 @@ export default class CollisionManager {
       this.world.checkToCollidingEndboss(tO, enmy);
   }
 }
-
-
