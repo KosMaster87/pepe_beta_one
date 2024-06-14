@@ -1,4 +1,4 @@
-export default class CollisionManager {
+class CollisionManager {
   constructor(world) {
     this.world = world;
   }
@@ -11,6 +11,15 @@ export default class CollisionManager {
     this.checkCollisionTo();
   }
 
+    /**
+   * Checks all Collisions
+   */
+    checkAllCollisions() {
+      this.checkCollisions();
+      this.checkThrowObjects();
+    }
+
+    
   checkCollisionEnemies() {
     this.world.level.enemies.forEach((enemy) =>
       this.checkEnemiesCollisions(enemy)
