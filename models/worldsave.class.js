@@ -1,19 +1,16 @@
-import CollisionManager from "./CollisionManager.js";
-
 class World {
   START_SCREEN = new StartScreen();
   camera_x = 0;
   level;
 
   // --------------
-
+  
   statusbars = []; // Aus der Erweirung die Variable verfügbar machen.
   worldStatusBars = new WorldStatusBars(); // Erweiterung für die Welt.
 
   // --------------
 
-  // CollisionManager;
-  // collisionManager = new CollisionManager(); // Erweiterung für die Welt.
+  // worldCollisionManager = new WorldCollisionManager(); // Erweiterung für die Welt.
 
   // --------------
 
@@ -41,7 +38,6 @@ class World {
   constructor(canvas, keyboard) {
     this.canvas_dummy = canvas;
     this.keyboard_dummy = keyboard;
-    this.collisionManager = new CollisionManager(this);
   }
 
   /**
@@ -219,10 +215,6 @@ class World {
     this.checkThrowObjects();
   }
 
-  checkCollisions() {
-    this.collisionManager.checkExAllCollisions();
-  }
-
   /**
    *
    * @returns Checks if bottle can be thrown
@@ -312,120 +304,54 @@ class World {
     document.getElementById("backToMenu").classList.remove("dNone");
   }
 
-  // ########################################################################
-  //                          About collisions
-  //                               START
-  // ########################################################################
-
-  // /**
-  //  * Checks alls Enemies collisions with character
-  //  * @param {*} enemy
-  //  */
-  // checkEnemiesCollisions(enemy) {
-  //   if (
-  //     this.character.isColliding(enemy) &&
-  //     (enemy instanceof Chicken || enemy instanceof MiniChicken)
-  //   )
-  //     this.checkCollisionChicken(enemy);
-  //   if (this.character.isColliding(enemy) && enemy instanceof Endboss)
-  //     this.checkCollisionEndboss(enemy);
-  // }
-
-  // /**
-  //  * Checks the enemies collisions
-  //  */
-  // checkCollisionEnemies() {
-  //   this.level.enemies.forEach((enemy) => this.checkEnemiesCollisions(enemy));
-  // }
-
-  // /**
-  //  * Checks Collision between character and chicken enemies
-  //  * @param {*} enemy
-  //  */
-  // checkCollisionChicken(enemy) {
-  //   if (
-  //     this.isCharacterColidingAbove(enemy) &&
-  //     this.character.isAboveGround() &&
-  //     !enemy.isDead
-  //   )
-  //     this.setEnemyDead(enemy);
-  //   else if (!enemy.isDead && !this.character.isDead()) this.hitCharacter();
-  // }
-
-  // /**
-  //  * Checks Collision between character and Endboss
-  //  * Hits Character if wether character nor Endboss are dead
-  //  * If Character is Dead sets GameOverScreen
-  //  * @param {*} enemy
-  //  */
-  // checkCollisionEndboss(enemy) {
-  //   if (!enemy.isDead() && !this.character.isDead()) this.hitCharacter();
-  //   else if (!enemy.isDead() && this.character.isDead())
-  //     this.setGameOverScreen(this.IMAGE_LOSE);
-  // }
-
-  // /**
-  //  * Checks Bottle Collisions
-  //  */
-  // checkCollisionBottles() {
-  //   this.bottles.forEach((bottle) => this.collisionBottles(bottle));
-  // }
-
-  // /**
-  //  * Adds the bottle to bottlebar
-  //  * @param {*} bottle
-  //  */
-  // collisionBottles(bottle) {
-  //   const activeBottle = bottle;
-  //   const bottled = this.bottles.indexOf(activeBottle);
-  //   if (this.character.isColliding(activeBottle) && this.isSpaceInBar())
-  //     this.addToStatusBar(bottled, bottle);
-  // }
-
-  // /**
-  //  * Add Coin to CoinBar
-  //  * @param {*} coin
-  //  */
-  // collisionCoins(coin) {
-  //   const activeCoin = coin;
-  //   let coined = this.coins.indexOf(activeCoin);
-  //   if (this.character.isColliding(activeCoin)) this.addToCoinBar(coined, coin);
-  // }
-
-  // /**
-  //  * Checks collision for each coin
-  //  */
-  // checkCollisionCoins() {
-  //   this.coins.forEach((coin) => this.collisionCoins(coin));
-  // }
-
-  // /**
-  //  * Checks all throwObject collisions to enemies
-  //  * seperates by chicken and endboss collision
-  //  * @param {*} enmy
-  //  * @param {*} tO
-  //  */
-  // checkAllToCollisions(enmy, tO) {
-  //   if (
-  //     tO.isColliding(enmy) &&
-  //     (enmy instanceof Chicken || enmy instanceof MiniChicken) &&
-  //     !enmy.isDead
-  //   )
-  //     this.checkToCollidingChicken(tO, enmy);
-  //   if (tO.isColliding(enmy) && enmy instanceof Endboss)
-  //     this.checkToCollidingEndboss(tO, enmy);
-  // }
-
-  // ########################################################################
-  //                          About collisions
-  //                                END
-  // ########################################################################
-  // ########################################################################
-  //                          About Bottles
-  //                                START
-  // ########################################################################
   /**
-   * About bottles.
+   * Checks Collision between character and Endboss
+   * Hits Character if wether character nor Endboss are dead
+   * If Character is Dead sets GameOverScreen
+   * @param {*} enemy
+   */
+  checkCollisionEndboss(enemy) {
+    if (!enemy.isDead() && !this.character.isDead()) this.hitCharacter();
+    else if (!enemy.isDead() && this.character.isDead())
+      this.setGameOverScreen(this.IMAGE_LOSE);
+  }
+
+  /**
+   * Checks Collision between character and chicken enemies
+   * @param {*} enemy
+   */
+  checkCollisionChicken(enemy) {
+    if (
+      this.isCharacterColidingAbove(enemy) &&
+      this.character.isAboveGround() &&
+      !enemy.isDead
+    )
+      this.setEnemyDead(enemy);
+    else if (!enemy.isDead && !this.character.isDead()) this.hitCharacter();
+  }
+
+  /**
+   * Checks alls Enemies collisions with character
+   * @param {*} enemy
+   */
+  checkEnemiesCollisions(enemy) {
+    if (
+      this.character.isColliding(enemy) &&
+      (enemy instanceof Chicken || enemy instanceof MiniChicken)
+    )
+      this.checkCollisionChicken(enemy);
+    if (this.character.isColliding(enemy) && enemy instanceof Endboss)
+      this.checkCollisionEndboss(enemy);
+  }
+
+  /**
+   * Checks the enemies collisions
+   */
+  checkCollisionEnemies() {
+    this.level.enemies.forEach((enemy) => this.checkEnemiesCollisions(enemy));
+  }
+
+  /**
    * Returns true if objectCount is smaller or equal to 10
    * @returns
    */
@@ -443,6 +369,53 @@ class World {
     bottle.AUDIO_PICK.play();
     this.statusbars[2].objectCount++;
     this.statusbars[2].setPercentage(this.statusbars[2].objectCount);
+  }
+
+  /**
+   * Checks Bottle Collisions
+   */
+  checkCollisionBottles() {
+    this.bottles.forEach((bottle) => this.collisionBottles(bottle));
+  }
+
+  /**
+   * Adds the bottle to bottlebar
+   * @param {*} bottle
+   */
+  collisionBottles(bottle) {
+    const activeBottle = bottle;
+    const bottled = this.bottles.indexOf(activeBottle);
+    if (this.character.isColliding(activeBottle) && this.isSpaceInBar())
+      this.addToStatusBar(bottled, bottle);
+  }
+
+  /**
+   * Adds the Coins to Statusbar
+   * @param {*} coined
+   * @param {*} coin
+   */
+  addToCoinBar(coined, coin) {
+    if (coined > -1) this.coins.splice(coined, 1);
+    coin.AUDIO_PICK.play();
+    this.statusbars[1].objectCount++;
+    this.statusbars[1].setPercentage(this.statusbars[1].objectCount);
+  }
+
+  /**
+   * Checks collision for each coin
+   */
+  checkCollisionCoins() {
+    this.coins.forEach((coin) => this.collisionCoins(coin));
+  }
+
+  /**
+   * Add Coin to CoinBar
+   * @param {*} coin
+   */
+  collisionCoins(coin) {
+    const activeCoin = coin;
+    let coined = this.coins.indexOf(activeCoin);
+    if (this.character.isColliding(activeCoin)) this.addToCoinBar(coined, coin);
   }
 
   /**
@@ -475,36 +448,6 @@ class World {
     const indexThrow = this.throwableObjects.indexOf(tO);
     this.throwableObjects.splice(indexThrow, 1);
   }
-
-  // ########################################################################
-  //                          About Bottles
-  //                              END
-  // ########################################################################
-  // ########################################################################
-  //                          About Coins
-  //                             START
-  // ########################################################################
-
-  /**
-   * Adds the Coins to Statusbar
-   * @param {*} coined
-   * @param {*} coin
-   */
-  addToCoinBar(coined, coin) {
-    if (coined > -1) this.coins.splice(coined, 1);
-    coin.AUDIO_PICK.play();
-    this.statusbars[1].objectCount++;
-    this.statusbars[1].setPercentage(this.statusbars[1].objectCount);
-  }
-
-  // ########################################################################
-  //                          About Coins
-  //                              END
-  // ########################################################################
-  // ########################################################################
-  //                          About Enemies
-  //                             START
-  // ########################################################################
 
   /**
    * Sets the enemy Dead and removes enemy after Timeout
@@ -543,11 +486,6 @@ class World {
     setTimeout(() => this.setGameOverScreen(this.IMAGE_GAME_OVER), 500);
   }
 
-  // ########################################################################
-  //                          About Enemies
-  //                             END
-  // ########################################################################
-
   /**
    * Checks the throwObject collision whith endboss
    * When Endboss is not dead, he will hit else the Ensboss is set Dead
@@ -563,6 +501,23 @@ class World {
   }
 
   /**
+   * Checks all throwObject collisions to enemies
+   * seperates by chicken and endboss collision
+   * @param {*} enmy
+   * @param {*} tO
+   */
+  checkAllToCollisions(enmy, tO) {
+    if (
+      tO.isColliding(enmy) &&
+      (enmy instanceof Chicken || enmy instanceof MiniChicken) &&
+      !enmy.isDead
+    )
+      this.checkToCollidingChicken(tO, enmy);
+    if (tO.isColliding(enmy) && enmy instanceof Endboss)
+      this.checkToCollidingEndboss(tO, enmy);
+  }
+
+  /**
    * Checks the collsions of ThrowObject
    */
   checkCollisionTo() {
@@ -571,15 +526,15 @@ class World {
     );
   }
 
-  // /**
-  //  * Checks the Collisions
-  //  */
-  // checkCollisions() {
-  //   this.checkCollisionEnemies();
-  //   this.checkCollisionBottles();
-  //   this.checkCollisionCoins();
-  //   this.checkCollisionTo();
-  // }
+  /**
+   * Checks the Collisions
+   */
+  checkCollisions() {
+    this.checkCollisionEnemies();
+    this.checkCollisionBottles();
+    this.checkCollisionCoins();
+    this.checkCollisionTo();
+  }
 
   // /**
   //  * Ohne Fn

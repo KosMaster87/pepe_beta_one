@@ -1,9 +1,10 @@
-class CollisionManager {
+export default class CollisionManager {
   constructor(world) {
     this.world = world;
   }
 
-  checkAllCollisions() {
+  checkCollisions() {
+    checkExAllCollisions() {
     this.checkCollisionEnemies();
     this.checkCollisionBottles();
     this.checkCollisionCoins();
@@ -89,4 +90,4 @@ class CollisionManager {
   }
 }
 
-export default CollisionManager;
+
